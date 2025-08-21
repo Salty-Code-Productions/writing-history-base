@@ -1,17 +1,16 @@
 import logging
 from functools import lru_cache
-from typing import Literal
 
 from .settings import get_app_settings
 
 
 @lru_cache
-def get_log_config(mode: Literal["debug", "development", "production"]) -> dict:
+def get_log_config() -> dict:
     app_settings = get_app_settings()
 
-    print("Starting app in mode:", mode)
+    print("Starting app in mode:", app_settings.mode)
 
-    match mode:
+    match app_settings.mode:
         case "debug":
             level = logging.DEBUG
         case "development":
@@ -21,7 +20,7 @@ def get_log_config(mode: Literal["debug", "development", "production"]) -> dict:
 
     if app_settings.logging_level_override is not None:
         print("Overriding logging level to:", app_settings.logging_level_override)
-        level = logging.getLevelName(app_settings.logging_level_override)
+        level = logging.getLevelNamesMapping().get(app_settings.logging_level_override.upper(), level)
 
     other_level = logging.INFO if level == logging.DEBUG else level
 
