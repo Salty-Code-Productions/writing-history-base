@@ -1,4 +1,5 @@
 import logging.config
+from typing import Callable
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +19,7 @@ logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 logger = logging.getLogger(__name__)
 
 
-def create_app(title: str, lifespan, add_cors: bool = False) -> FastAPI:
+def create_app(title: str, lifespan, add_cors: bool = False, healthcheck: Callable[[], bool] | None = None) -> FastAPI:
     app = FastAPI(
         title=title,
         lifespan=lifespan,
@@ -59,7 +60,7 @@ def create_app(title: str, lifespan, add_cors: bool = False) -> FastAPI:
         )
 
     @app.get("/healthz")
-    async def healthz() -> str:
-        return "OK"
+    async def healthz() -> bool:
+        return healthcheck() if healthcheck is not None else True
 
     return app
