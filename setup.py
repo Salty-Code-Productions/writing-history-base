@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="writing-history-base",
-    version="1.0.0",
+    version="1.1.0",
     description="Base FastAPI app, settings, and logging utilities for Writing History services.",
     url="https://github.com/Salty-Code-Productions/writing-history-base",
     author="Salty Code Productions",
